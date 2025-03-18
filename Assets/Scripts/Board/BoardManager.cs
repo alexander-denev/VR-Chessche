@@ -68,7 +68,7 @@ public class BoardManager : MonoBehaviour
                 // if no chessman is selected then we need to select it first
                 if (SelectedChessman == null)
                 {
-                    SelectChessman();
+                    SelectChessman(selectionX, selectionY);
                 }
                 // if chessman is already selected then we need to move it
                 else
@@ -86,16 +86,16 @@ public class BoardManager : MonoBehaviour
         
     }
 
-    private void SelectChessman()
+    public void SelectChessman(int x, int y)
     {
         // if no chessman is on the clicked tile
-        if (Chessmans[selectionX, selectionY] == null) return;
+        if (Chessmans[x, y] == null) return;
         // if it is not the turn of the selected chessman's team
-        if (Chessmans[selectionX, selectionY].isWhite != isWhiteTurn) return;
+        if (Chessmans[x, y].isWhite != isWhiteTurn) return;
 
         // Selecting chessman with yellow highlight
-        SelectedChessman = Chessmans[selectionX, selectionY];
-        BoardHighlights.Instance.SetTileYellow(selectionX, selectionY);
+        SelectedChessman = Chessmans[x, y];
+        BoardHighlights.Instance.SetTileYellow(x, y);
 
         // Allowed moves highlighted in blue and enemy in Red
         allowedMoves = SelectedChessman.PossibleMoves();
