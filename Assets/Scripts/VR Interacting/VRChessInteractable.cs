@@ -7,6 +7,7 @@ public class VRChessInteractable : MonoBehaviour
 {
     private Chessman chessman;
     private XRGrabInteractable grabInteractable;
+    private bool isOverSocket;
 
     private void Awake()
     {
@@ -14,6 +15,8 @@ public class VRChessInteractable : MonoBehaviour
         grabInteractable = GetComponent<XRGrabInteractable>();
         grabInteractable.selectEntered.AddListener(OnGrab);
         grabInteractable.selectExited.AddListener(OnRelease);
+        grabInteractable.hoverEntered.AddListener(OnHover);
+        grabInteractable.hoverExited.AddListener(OnUnhover);
     }
 
     private void OnDestroy()
@@ -26,23 +29,45 @@ public class VRChessInteractable : MonoBehaviour
     {
         if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
+            BoardHighlights.Instance.DisableAllHighlights();
             VRChessSocket socket = socketInteractor.GetComponent<VRChessSocket>();
-            BoardManager.Instance.SelectChessman(socket.x, socket.y);
+            if (chessman.currentX != socket.x || chessman.currentY != socket.y)
+            {
+                BoardManager.Instance.MoveChessman(chessman, socket.x, socket.y);
+            }
         } else
         {
-            BoardManager.Instance.SelectChessman(chessman.currentX, chessman.currentY);
+            BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
+            BoardHighlights.Instance.HighlightPossibleMoves(chessman);
         }
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
+        if (args.interactorObject is XRSocketInteractor socketInteractor)
+        {
+            
+        } else
+        {
+            if (!isOverSocket)
+            {
+                grabInteractable.interactionManager.SelectEnter(args.interactorObject, grabInteractable);
+            } 
+        }
+    }
+    private void OnHover(HoverEnterEventArgs args)
+    {
         if (args.interactorObject is XRSocketInteractor)
         {
-            Debug.Log(gameObject.name + " released by socket!");
+            isOverSocket = true;
         }
-        else
+    }
+
+    private void OnUnhover(HoverExitEventArgs args)
+    {
+        if (args.interactorObject is XRSocketInteractor)
         {
-            BoardManager.Instance.DeselectChessman();
+            isOverSocket = false;
         }
     }
 }

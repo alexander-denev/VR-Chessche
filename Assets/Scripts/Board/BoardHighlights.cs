@@ -100,16 +100,18 @@ public class BoardHighlights : MonoBehaviour
         CheckTiles[x, y].SetActive(true);
     }
 
-    public void HighlightPossibleMoves(bool[,] allowedMoves, bool White)
+    public void HighlightPossibleMoves(Chessman chessman)
     {
-        for(int i=0; i<8; i++)
+        bool[,] allowedMoves = chessman.PossibleMoves();
+
+        for (int i=0; i<8; i++)
         {
             for(int j=0; j<8; j++)
             {
                 if(allowedMoves[i,j])
                 {
                     // Highlight Opponent
-                    if(BoardManager.Instance.Chessmans[i,j] != null && BoardManager.Instance.Chessmans[i, j].isWhite != White)
+                    if(BoardManager.Instance.Chessmans[i,j] != null && BoardManager.Instance.Chessmans[i, j].isWhite != BoardManager.Instance.isWhiteTurn)
                     {
                         SetTileRed(i, j);
                     }
@@ -117,11 +119,11 @@ public class BoardHighlights : MonoBehaviour
                     {
                         // Highlight EnPassant move
                         if (BoardManager.Instance.EnPassant[0] == i && BoardManager.Instance.EnPassant[1] == j 
-                            && BoardManager.Instance.SelectedChessman.GetType() == typeof(Pawn))
+                            && chessman.GetType() == typeof(Pawn))
                             SetTilePurple(i, j);
                         // Highlight Castling move
-                        else if (BoardManager.Instance.SelectedChessman.GetType() == typeof(King) 
-                            && System.Math.Abs(i - BoardManager.Instance.SelectedChessman.currentX) == 2)
+                        else if (chessman.GetType() == typeof(King) 
+                            && System.Math.Abs(i - chessman.currentX) == 2)
                             SetTilePurple(i, j);
                         // Highlight Empty Cell
                         else

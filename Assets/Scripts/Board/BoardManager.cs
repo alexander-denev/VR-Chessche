@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -33,10 +32,6 @@ public class BoardManager : MonoBehaviour
     // EnPassant move
     public int[] EnPassant { set; get; }
 
-    // The selected tile
-    private int selectionX = -1;
-    private int selectionY = -1;
-
     // Variable to store turn
     public bool isWhiteTurn = true;
 
@@ -63,30 +58,10 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void SelectChessman(int x, int y)
+    public void MoveChessman(Chessman chessman, int x, int y)
     {
-        // if no chessman is on the clicked tile
-        if (Chessmans[x, y] == null) return;
-        // if it is not the turn of the selected chessman's team
-        if (Chessmans[x, y].isWhite != isWhiteTurn) return;
+        bool[,] allowedMoves = chessman.PossibleMoves();
 
-        // Selecting chessman with yellow highlight
-        SelectedChessman = Chessmans[x, y];
-        BoardHighlights.Instance.SetTileYellow(x, y);
-
-        // Allowed moves highlighted in blue and enemy in Red
-        allowedMoves = SelectedChessman.PossibleMoves();
-        BoardHighlights.Instance.HighlightPossibleMoves(allowedMoves, isWhiteTurn);
-    }
-
-    public void DeselectChessman()
-    {
-        SelectedChessman = null;
-        BoardHighlights.Instance.DisableAllHighlights();
-    }
-
-    public void MoveChessman(int x, int y)
-    {
         if(allowedMoves[x,y])
         {
             Chessman opponent = Chessmans[x, y];
@@ -100,7 +75,7 @@ public class BoardManager : MonoBehaviour
             }
             // -------EnPassant Move Manager------------
             // If it is an EnPassant move than Destroy the opponent
-            if (EnPassant[0] == x && EnPassant[1] == y && SelectedChessman.GetType() == typeof(Pawn))
+            if (EnPassant[0] == x && EnPassant[1] == y && chessman.GetType() == typeof(Pawn))
             {
                 if(isWhiteTurn)
                     opponent = Chessmans[x, y + 1];
@@ -116,31 +91,31 @@ public class BoardManager : MonoBehaviour
             EnPassant[0] = EnPassant[1] = -1;
 
             // Set EnPassant available for opponent
-            if(SelectedChessman.GetType() == typeof(Pawn))
+            if(chessman.GetType() == typeof(Pawn))
             {
                 //-------Promotion Move Manager------------
                 if (y == 7)
                 {
-                    ActiveChessmans.Remove(SelectedChessman.gameObject);
-                    Destroy(SelectedChessman.gameObject);
+                    ActiveChessmans.Remove(chessman.gameObject);
+                    Destroy(chessman.gameObject);
                     SpawnChessman(10, new Vector3(x, 0, y));
-                    SelectedChessman = Chessmans[x, y];
+                    chessman = Chessmans[x, y];
                 }
                 if (y == 0)
                 {
-                    ActiveChessmans.Remove(SelectedChessman.gameObject);
-                    Destroy(SelectedChessman.gameObject);
+                    ActiveChessmans.Remove(chessman.gameObject);
+                    Destroy(chessman.gameObject);
                     SpawnChessman(4, new Vector3(x, 0, y));
-                    SelectedChessman = Chessmans[x, y];
+                    chessman = Chessmans[x, y];
                 }
                 //-------Promotion Move Manager Over-------
                 
-                if (SelectedChessman.currentY == 1 && y == 3)
+                if (chessman.currentY == 1 && y == 3)
                 {
                     EnPassant[0] = x;
                     EnPassant[1] = y - 1;
                 }
-                if (SelectedChessman.currentY == 6 && y == 4)
+                if (chessman.currentY == 6 && y == 4)
                 {
                     EnPassant[0] = x;
                     EnPassant[1] = y + 1;
@@ -150,10 +125,10 @@ public class BoardManager : MonoBehaviour
 
             // -------Castling Move Manager------------
             // If the selectef chessman is King and is trying Castling move which needs two steps
-            if(SelectedChessman.GetType() == typeof(King) && System.Math.Abs(x - SelectedChessman.currentX) == 2)
+            if(chessman.GetType() == typeof(King) && System.Math.Abs(x - chessman.currentX) == 2)
             {
                 // King Side (towards (0, 0))
-                if(x - SelectedChessman.currentX < 0)
+                if(x - chessman.currentX < 0)
                 {
                     // Moving Rook1
                     Chessmans[x + 1, y] = Chessmans[x - 1, y];
@@ -172,25 +147,20 @@ public class BoardManager : MonoBehaviour
                     Chessmans[x - 1, y].transform.position = new Vector3(x - 1, 0, y);
                     Chessmans[x - 1, y].isMoved = true;
                 }
-                // Note : King will move as a SelectedChessman by this function later
+                // Note : King will move as a chessman by this function later
             }
             // -------Castling Move Manager Over-------
 
-            Chessmans[SelectedChessman.currentX, SelectedChessman.currentY] = null;
-            Chessmans[x, y] = SelectedChessman;
-            SelectedChessman.SetPosition(x, y);
-            SelectedChessman.transform.position = new Vector3(x, 0, y);
-            SelectedChessman.isMoved = true;
+            Chessmans[chessman.currentX, chessman.currentY] = null;
+            Chessmans[x, y] = chessman;
+            chessman.SetPosition(x, y);
+            chessman.transform.position = new Vector3(x, 0, y);
+            chessman.isMoved = true;
             isWhiteTurn = !isWhiteTurn;
 
             // to be deleted
             // printBoard();
         }
-
-        // De-select the selected chessman
-        SelectedChessman = null;
-        // Disabling all highlights
-        BoardHighlights.Instance.DisableAllHighlights();
 
         // ------- King Check Alert Manager -----------
         // Is it Check to the King

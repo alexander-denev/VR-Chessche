@@ -134,13 +134,12 @@ public class ChessAI : MonoBehaviour
         /* ---------------------- Act ---------------------- */
         // For most favourable move
         // select chessman
-        Debug.Log(NPCSelectedChessman.GetType() + " to (" + moveX + ", " + moveY + ") " + winningValue + "\n"); // remove this line
-        BoardManager.Instance.SelectedChessman = BoardManager.Instance.Chessmans[NPCSelectedChessman.currentX, NPCSelectedChessman.currentY];
-        BoardManager.Instance.allowedMoves = BoardManager.Instance.SelectedChessman.PossibleMoves();
+        // Debug.Log(NPCSelectedChessman.GetType() + " to (" + moveX + ", " + moveY + ") " + winningValue + "\n"); // remove this line
+        Chessman selectedChessman = BoardManager.Instance.Chessmans[NPCSelectedChessman.currentX, NPCSelectedChessman.currentY];
 
         // Debug.Log("Moving");
         // move chessman
-        BoardManager.Instance.MoveChessman(moveX, moveY);
+        BoardManager.Instance.MoveChessman(selectedChessman, moveX, moveY);
 
         // Stop the StopWatch
         stopwatch.Stop();

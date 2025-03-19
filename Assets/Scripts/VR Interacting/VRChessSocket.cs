@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class VRChessSocket : MonoBehaviour
 {
@@ -9,10 +11,5 @@ public class VRChessSocket : MonoBehaviour
     {
         x = (int)transform.position.x;
         y = (int)transform.position.z;
-    }
-
-    public void Select()
-    {
-        BoardManager.Instance.SelectChessman(x, y);
     }
 }
