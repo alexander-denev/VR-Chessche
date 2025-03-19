@@ -38,7 +38,7 @@ public class VRChessInteractable : XRGrabInteractable
         if (!isOverSocket)
         {
             XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
-            currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)this);
+            currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)this); //FIXME: already selecting error
         }
     }
 
