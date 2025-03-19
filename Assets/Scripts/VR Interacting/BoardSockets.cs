@@ -4,9 +4,9 @@ public class BoardSockets : MonoBehaviour
 {
     public static BoardSockets Instance { get; set; }
 
-    public GameObject VrChessSocketPrefab;
+    [SerializeField] GameObject VrChessSocketPrefab;
 
-    private GameObject[,] VrChessSockets = new GameObject[8, 8];
+    public GameObject[,] VrChessSockets = new GameObject[8, 8];
 
     private void Start()
     {

@@ -209,7 +209,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Rook) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Rook/Queen Down");
+                //Debug.Log("Threat from Rook/Queen Down");
                 SetTileRed(x, y);
                 return;
             }
@@ -245,7 +245,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Rook) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Rook/Queen Right");
+                //Debug.Log("Threat from Rook/Queen Right");
                 SetTileRed(x, y);
                 return;
             }
@@ -281,7 +281,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Rook) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Rook/Queen Left");
+                //Debug.Log("Threat from Rook/Queen Left");
                 SetTileRed(x, y);
                 return;
             }
@@ -317,7 +317,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Rook) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Rook/Queen Up");
+                //Debug.Log("Threat from Rook/Queen Up");
                 SetTileRed(x, y);
                 return;
             }
@@ -364,7 +364,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Bishup) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Bishup/Queen LR Down");
+                //Debug.Log("Threat from Bishup/Queen LR Down");
                 SetTileRed(x, y);
                 return;
             }
@@ -411,7 +411,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Bishup) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Bishup/Queen LR Up");
+                //Debug.Log("Threat from Bishup/Queen LR Up");
                 SetTileRed(x, y);
                 return;
             }
@@ -458,7 +458,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Bishup) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Bishup/Queen RL Down");
+                //Debug.Log("Threat from Bishup/Queen RL Down");
                 SetTileRed(x, y);
                 return;
             }
@@ -505,7 +505,7 @@ public class BoardHighlights : MonoBehaviour
             // Else if the piece is from opponent team
             if(piece.GetType() == typeof(Bishup) || piece.GetType() == typeof(Queen))
             {
-                Debug.Log("Threat from Bishup/Queen RL Up");
+                //Debug.Log("Threat from Bishup/Queen RL Up");
                 SetTileRed(x, y);
                 return;
             }

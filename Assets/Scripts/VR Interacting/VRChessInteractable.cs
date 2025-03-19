@@ -3,30 +3,20 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-public class VRChessInteractable : MonoBehaviour
+public class VRChessInteractable : XRGrabInteractable
 {
     private Chessman chessman;
-    private XRGrabInteractable grabInteractable;
     private bool isOverSocket;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         chessman = GetComponent<Chessman>();
-        grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectEntered.AddListener(OnGrab);
-        grabInteractable.selectExited.AddListener(OnRelease);
-        grabInteractable.hoverEntered.AddListener(OnHover);
-        grabInteractable.hoverExited.AddListener(OnUnhover);
     }
 
-    private void OnDestroy()
+    protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
-        grabInteractable.selectEntered.RemoveListener(OnGrab);
-        grabInteractable.selectExited.RemoveListener(OnRelease);
-    }
-
-    private void OnGrab(SelectEnterEventArgs args)
-    {
+        base.OnSelectEntered(args);
         if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
             BoardHighlights.Instance.DisableAllHighlights();
@@ -42,29 +32,28 @@ public class VRChessInteractable : MonoBehaviour
         }
     }
 
-    private void OnRelease(SelectExitEventArgs args)
+    protected override void OnSelectExited(SelectExitEventArgs args)
     {
-        if (args.interactorObject is XRSocketInteractor socketInteractor)
+        base.OnSelectExited(args);
+        if (!isOverSocket)
         {
-            
-        } else
-        {
-            if (!isOverSocket)
-            {
-                grabInteractable.interactionManager.SelectEnter(args.interactorObject, grabInteractable);
-            } 
+            XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
+            currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)this);
         }
     }
-    private void OnHover(HoverEnterEventArgs args)
+
+    protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
+        base.OnHoverEntered(args);
         if (args.interactorObject is XRSocketInteractor)
         {
             isOverSocket = true;
         }
     }
 
-    private void OnUnhover(HoverExitEventArgs args)
+    protected override void OnHoverExited(HoverExitEventArgs args)
     {
+        base.OnHoverExited(args);
         if (args.interactorObject is XRSocketInteractor)
         {
             isOverSocket = false;
