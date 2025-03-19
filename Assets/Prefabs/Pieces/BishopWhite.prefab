@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -1907449780618412821}
   - component: {fileID: 7425388956525212328}
   - component: {fileID: 1676761996679890777}
+  - component: {fileID: -1687438727127164159}
   m_Layer: 0
   m_Name: BishopWhite
   m_TagString: Untagged
@@ -276,3 +277,15 @@ MonoBehaviour:
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 0
+--- !u!114 &-1687438727127164159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720791739575168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e9be7e6dcafbf42837d8b8620b39da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

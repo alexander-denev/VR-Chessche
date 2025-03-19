@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -8111896582093628301}
   - component: {fileID: -135336887376778569}
   - component: {fileID: 4139742326020419420}
+  - component: {fileID: 6280508041886204645}
   m_Layer: 0
   m_Name: RookBlack
   m_TagString: Untagged
@@ -276,3 +277,15 @@ MonoBehaviour:
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 0
+--- !u!114 &6280508041886204645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414007765012872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e9be7e6dcafbf42837d8b8620b39da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7678773339004157413}
   - component: {fileID: 8675377953066619907}
   - component: {fileID: -4151806800857308330}
+  - component: {fileID: -4342755793850987647}
   m_Layer: 0
   m_Name: KingWhite
   m_TagString: Untagged
@@ -276,3 +277,15 @@ MonoBehaviour:
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 0
+--- !u!114 &-4342755793850987647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725687788178442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e9be7e6dcafbf42837d8b8620b39da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
