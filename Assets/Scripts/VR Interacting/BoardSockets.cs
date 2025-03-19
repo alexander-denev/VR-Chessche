@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class BoardSockets : MonoBehaviour
 {
@@ -28,5 +30,11 @@ public class BoardSockets : MonoBehaviour
                 
             }
         }
+    }
+
+    public void MoveChessman(GameObject chessman, int x, int y)
+    {
+        XRSocketInteractor socket = VrChessSockets[x, y].GetComponent<XRSocketInteractor>();
+        socket.interactionManager.SelectEnter((IXRSelectInteractor)socket, (IXRSelectInteractable)chessman.GetComponent<XRGrabInteractable>());
     }
 }

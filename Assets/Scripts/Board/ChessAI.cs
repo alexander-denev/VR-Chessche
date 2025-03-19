@@ -138,8 +138,9 @@ public class ChessAI : MonoBehaviour
         Chessman selectedChessman = BoardManager.Instance.Chessmans[NPCSelectedChessman.currentX, NPCSelectedChessman.currentY];
 
         // Debug.Log("Moving");
-        // move chessman
-        BoardManager.Instance.MoveChessman(selectedChessman, moveX, moveY);
+        // physically move chessman
+        BoardSockets.Instance.MoveChessman(selectedChessman.gameObject, moveX, moveY);
+        
 
         // Stop the StopWatch
         stopwatch.Stop();
