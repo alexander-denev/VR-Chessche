@@ -55,35 +55,12 @@ public class BoardManager : MonoBehaviour
 
     private void Update()
     {
-        // Update Selected tile
-        UpdateSelection();
-        // Draw chessboard in every frame update
-        DrawChessBoard();
-
-        // Select/Move chessman on mouse click & it is Player's turn : White
-        if(Input.GetMouseButtonDown(0) && isWhiteTurn)
-        {
-            if (selectionX >= 0 && selectionY >= 0 && selectionX <= 7 && selectionY <= 7)
-            {
-                // if no chessman is selected then we need to select it first
-                if (SelectedChessman == null)
-                {
-                    SelectChessman(selectionX, selectionY);
-                }
-                // if chessman is already selected then we need to move it
-                else
-                {
-                    MoveChessman(selectionX, selectionY);
-                }
-            }
-        }
         // // If it is NPC's turn : Black
-        else if(!isWhiteTurn)
+        if(!isWhiteTurn)
         {
             // NPC will make a move
             ChessAI.Instance.NPCMove();
         }
-        
     }
 
     public void SelectChessman(int x, int y)
@@ -100,6 +77,12 @@ public class BoardManager : MonoBehaviour
         // Allowed moves highlighted in blue and enemy in Red
         allowedMoves = SelectedChessman.PossibleMoves();
         BoardHighlights.Instance.HighlightPossibleMoves(allowedMoves, isWhiteTurn);
+    }
+
+    public void DeselectChessman()
+    {
+        SelectedChessman = null;
+        BoardHighlights.Instance.DisableAllHighlights();
     }
 
     public void MoveChessman(int x, int y)
@@ -227,55 +210,7 @@ public class BoardManager : MonoBehaviour
 
        
         // Check if it is Checkmate
-        isCheckmate();
-    }
-
-    private void UpdateSelection()
-    {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
-        {
-            // Debug.Log(hit.point);
-            selectionX = (int)(hit.point.x + 0.5f);
-            selectionY = (int)(hit.point.z + 0.5f);
-        }
-        else
-        {
-            selectionX = -1;
-            selectionY = -1;
-        }
-    }
-
-    private void DrawChessBoard()
-    {
-        Vector3 widthLine = Vector3.right * 8;
-        Vector3 heightLine = Vector3.forward * 8;
-        Vector3 offset = new Vector3(0.5f, 0f, 0.5f);
-        for (int i=0; i<=8; i++)
-        {
-            Vector3 start = Vector3.forward * i - offset;
-            Debug.DrawLine(start, start + widthLine);
-            for(int j=0; j<=8; j++)
-            {
-                start = Vector3.right * i - offset;
-                Debug.DrawLine(start, start + heightLine);
-            }
-        }
-        
-
-        // Draw Selection
-        if(selectionX >= 0 && selectionY >= 0 && selectionX <= 7 && selectionY <= 7)
-        {
-            Debug.DrawLine(
-                Vector3.forward * selectionY + Vector3.right * selectionX - offset,
-                Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1) - offset
-                );
-            Debug.DrawLine(
-                Vector3.forward * (selectionY + 1) + Vector3.right * selectionX - offset,
-                Vector3.forward * selectionY + Vector3.right * (selectionX + 1) - offset
-                );
-        }
+        IsCheckmate();
     }
 
     private void SpawnChessman(int index, Vector3 position)
@@ -364,7 +299,7 @@ public class BoardManager : MonoBehaviour
         SpawnAllChessmans();
     }
 
-    private void isCheckmate()
+    private void IsCheckmate()
     {
         bool hasAllowedMove = false;
         foreach(GameObject chessman in ActiveChessmans)
@@ -402,40 +337,4 @@ public class BoardManager : MonoBehaviour
             // EndGame();
         }
     }
-
-    //to be deleted
-    // private void printBoard()
-    // {
-    //     string board = "";
-    //     for(int i=0; i<8; i++)
-    //     {
-    //         for(int j=7; j>=0; j--)
-    //         {
-    //             if(Chessmans[j,i] == null)
-    //             {
-    //                 board = board + "[] ";
-    //                 continue;
-    //             }
-
-    //             board = board + (Chessmans[j,i].isWhite ? "W":"B");
-    //             Chessman chessman = Chessmans[j,i];
-
-    //             if(chessman.GetType() == typeof(King))
-    //                 board = board + "K ";
-    //             if(chessman.GetType() == typeof(Queen))
-    //                 board = board + "Q ";
-    //             if(chessman.GetType() == typeof(Rook))
-    //                 board = board + "R ";
-    //             if(chessman.GetType() == typeof(Bishup))
-    //                 board = board + "B ";
-    //             if(chessman.GetType() == typeof(Knight))
-    //                 board = board + "k ";
-    //             if(chessman.GetType() == typeof(Pawn))
-    //                 board = board + "P ";
-    //         }
-
-    //         board = board + "\n";
-    //     }
-    //     System.IO.File.WriteAllText(@"C:\Users\darsh\Desktop\movedetail.txt", board);
-    // }
 }

@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class VRChessSocket : MonoBehaviour
 {
-    public int currentX;
-    public int currentY;
+    public int x;
+    public int y;
 
     private void Start()
     {
-        currentX = (int)transform.position.x;
-        currentY = (int)transform.position.z;
+        x = (int)transform.position.x;
+        y = (int)transform.position.z;
     }
 
     public void Select()
     {
-        BoardManager.Instance.SelectChessman(currentX, currentY);
+        BoardManager.Instance.SelectChessman(x, y);
     }
 }

@@ -5,10 +5,12 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class VRChessInteractable : MonoBehaviour
 {
+    private Chessman chessman;
     private XRGrabInteractable grabInteractable;
 
     private void Awake()
     {
+        chessman = GetComponent<Chessman>();
         grabInteractable = GetComponent<XRGrabInteractable>();
         grabInteractable.selectEntered.AddListener(OnGrab);
         grabInteractable.selectExited.AddListener(OnRelease);
@@ -22,12 +24,13 @@ public class VRChessInteractable : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        if (args.interactorObject is XRSocketInteractor) 
+        if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
-            Debug.Log(gameObject.name + " grabbed by socket!");
+            VRChessSocket socket = socketInteractor.GetComponent<VRChessSocket>();
+            BoardManager.Instance.SelectChessman(socket.x, socket.y);
         } else
         {
-            Debug.Log(gameObject.name + " grabbed by " + args.interactorObject);
+            BoardManager.Instance.SelectChessman(chessman.currentX, chessman.currentY);
         }
     }
 
@@ -39,7 +42,7 @@ public class VRChessInteractable : MonoBehaviour
         }
         else
         {
-            Debug.Log(gameObject.name + " released by " + args.interactorObject);
+            BoardManager.Instance.DeselectChessman();
         }
     }
 }
