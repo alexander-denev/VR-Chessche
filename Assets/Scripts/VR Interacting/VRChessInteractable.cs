@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -6,7 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class VRChessInteractable : XRGrabInteractable
 {
     private Chessman chessman;
-    private bool isOverSocket;
+    private readonly List<XRSocketInteractor> hoveringSockets = new();
+    private XRSocketInteractor currentClosestSocket;
 
     protected override void Awake()
     {
@@ -35,28 +37,53 @@ public class VRChessInteractable : XRGrabInteractable
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
         base.OnSelectExited(args);
-        if (!isOverSocket)
+        if (hoveringSockets.Count == 0)
         {
             XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
             currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)this); //FIXME: already selecting error
         }
     }
 
+    // HOVER ============================================================================================================
+
     protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
         base.OnHoverEntered(args);
-        if (args.interactorObject is XRSocketInteractor)
+        if (args.interactorObject is XRSocketInteractor socket)
         {
-            isOverSocket = true;
+            hoveringSockets.Add(socket);
+            if (socket != GetClosestSocket())
+            {
+                socket.interactionManager.HoverCancel((IXRHoverInteractor)socket, (IXRHoverInteractable)this);
+            }
         }
     }
 
     protected override void OnHoverExited(HoverExitEventArgs args)
     {
         base.OnHoverExited(args);
-        if (args.interactorObject is XRSocketInteractor)
+        if (args.interactorObject is XRSocketInteractor socket)
         {
-            isOverSocket = false;
+            hoveringSockets.Remove(socket);
         }
+    }
+
+    private XRSocketInteractor GetClosestSocket()
+    {
+        XRSocketInteractor closest = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var socket in BoardSockets.Instance.VrChessSockets)
+        {
+            float distance = Vector3.Distance(transform.position, socket.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = socket.GetComponent<XRSocketInteractor>();
+            }
+        }
+
+        return closest;
+    
     }
 }

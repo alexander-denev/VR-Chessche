@@ -486,7 +486,7 @@ PrefabInstance:
     - target: {fileID: 6869629127597136921, guid: 4d69b729949d4fa45a82277944f3815c,
         type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 4294967295
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6871589264118589747, guid: 4d69b729949d4fa45a82277944f3815c,
         type: 3}
@@ -2380,7 +2380,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!64 &1518457950
 MeshCollider:
