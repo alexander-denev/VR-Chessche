@@ -8,7 +8,7 @@ public class VRChessInteractable : XRGrabInteractable
 {
     private Chessman chessman;
     private readonly List<XRSocketInteractor> hoveringSockets = new();
-    private XRSocketInteractor currentClosestSocket;
+    private XRSocketInteractor currentHoveringSocket;
 
     protected override void Awake()
     {
@@ -37,7 +37,7 @@ public class VRChessInteractable : XRGrabInteractable
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
         base.OnSelectExited(args);
-        if (hoveringSockets.Count == 0)
+        if (!currentHoveringSocket)
         {
             XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
             currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)this); //FIXME: already selecting error
@@ -49,12 +49,15 @@ public class VRChessInteractable : XRGrabInteractable
     protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
         base.OnHoverEntered(args);
-        if (args.interactorObject is XRSocketInteractor socket)
+        if (args.interactorObject is XRSocketInteractor eventSocket)
         {
-            hoveringSockets.Add(socket);
-            if (socket != GetClosestSocket())
+            if (eventSocket != currentHoveringSocket)
             {
-                socket.interactionManager.HoverCancel((IXRHoverInteractor)socket, (IXRHoverInteractable)this);
+                if (currentHoveringSocket != null)
+                {
+                    currentHoveringSocket.interactionManager.HoverCancel((IXRHoverInteractor)currentHoveringSocket, (IXRHoverInteractable)this);
+                }
+                currentHoveringSocket = eventSocket;
             }
         }
     }
@@ -62,28 +65,13 @@ public class VRChessInteractable : XRGrabInteractable
     protected override void OnHoverExited(HoverExitEventArgs args)
     {
         base.OnHoverExited(args);
-        if (args.interactorObject is XRSocketInteractor socket)
+        if (args.interactorObject is XRSocketInteractor eventSocket)
         {
-            hoveringSockets.Remove(socket);
-        }
-    }
-
-    private XRSocketInteractor GetClosestSocket()
-    {
-        XRSocketInteractor closest = null;
-        float minDistance = float.MaxValue;
-
-        foreach (var socket in BoardSockets.Instance.VrChessSockets)
-        {
-            float distance = Vector3.Distance(transform.position, socket.transform.position);
-            if (distance < minDistance)
+            if (!args.isCanceled)
             {
-                minDistance = distance;
-                closest = socket.GetComponent<XRSocketInteractor>();
+                currentHoveringSocket = null;
             }
         }
-
-        return closest;
-    
     }
+
 }
