@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8548108493344626820}
   - component: {fileID: 2893077677626303696}
   - component: {fileID: 2076705179007539674}
-  - component: {fileID: 1106246045684579839}
   m_Layer: 0
   m_Name: VRChessSocket
   m_TagString: Untagged
@@ -88,7 +87,7 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1106246045684579839}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: VRChessSocket, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 1
@@ -102,7 +101,7 @@ MonoBehaviour:
         m_CallState: 2
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 1
+  m_ShowInteractableHoverMeshes: 0
   m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9a9caeacc3620da4dbb2a6861ff2f9e3,
     type: 2}
   m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: dad9ccefd5965e54d8dc635dc2add584,
@@ -115,17 +114,3 @@ MonoBehaviour:
   m_SocketScaleMode: 0
   m_FixedScale: {x: 1, y: 1, z: 1}
   m_TargetBoundsSize: {x: 1, y: 1, z: 1}
---- !u!114 &1106246045684579839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6049228970772849424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28e8e4bf0f05ed643936ccabe1861439, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  x: 0
-  y: 0

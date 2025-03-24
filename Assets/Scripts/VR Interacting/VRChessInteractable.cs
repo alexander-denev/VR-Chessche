@@ -22,10 +22,11 @@ public class VRChessInteractable : XRGrabInteractable
         if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
             BoardHighlights.Instance.DisableAllHighlights();
-            VRChessSocket socket = socketInteractor.GetComponent<VRChessSocket>();
-            if (chessman.currentX != socket.x || chessman.currentY != socket.y)
+            int socketX = (int)socketInteractor.transform.position.x;
+            int socketY = (int)socketInteractor.transform.position.y;
+            if (chessman.currentX != socketX || chessman.currentY != socketY)
             {
-                BoardManager.Instance.MoveChessman(chessman, socket.x, socket.y);
+                BoardManager.Instance.MoveChessman(chessman, socketX, socketY);
             }
         } else
         {
