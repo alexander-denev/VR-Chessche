@@ -11,7 +11,7 @@ public class VRChessPiece : MonoBehaviour
     private GameObject previewObject;
     [SerializeField] Material hoverPreviewMaterial;
 
-    private XRSocketInteractor currentSocket
+    private XRSocketInteractor CurrentSocket
     {
         get { 
             return BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>(); 
@@ -19,6 +19,16 @@ public class VRChessPiece : MonoBehaviour
     }
     private XRSocketInteractor currentHoveringSocket;
     private bool isHovering;
+
+    private Quaternion SnappedRotation
+    {
+        get
+        {
+            Vector3 currentRotation = transform.rotation.eulerAngles;
+            float snappedYRotation = Mathf.Round(currentRotation.y / 90) * 90;
+            return Quaternion.Euler(0, snappedYRotation, 0);
+        }
+    }
 
     private void Awake()
     {
@@ -49,6 +59,8 @@ public class VRChessPiece : MonoBehaviour
         {
             BoardHighlights.Instance.DisableAllHighlights();
 
+            socketInteractor.transform.rotation = SnappedRotation;
+
             VRChessSocket vrSocket = socketInteractor.GetComponent<VRChessSocket>();
             if (chessman.currentX != vrSocket.x || chessman.currentY != vrSocket.y)
             {
@@ -59,7 +71,7 @@ public class VRChessPiece : MonoBehaviour
             BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
             BoardHighlights.Instance.HighlightPossibleMoves(chessman);
 
-            previewObject.transform.position = currentSocket.transform.position;
+            previewObject.transform.position = CurrentSocket.transform.position;
             previewObject.SetActive(true);
         }
     }
@@ -75,7 +87,7 @@ public class VRChessPiece : MonoBehaviour
             }
             else
             {
-                currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)grabInteractable);
+                CurrentSocket.interactionManager.SelectEnter((IXRSelectInteractor)CurrentSocket, (IXRSelectInteractable)grabInteractable);
             }
             currentHoveringSocket = null;
         }
@@ -95,10 +107,9 @@ public class VRChessPiece : MonoBehaviour
             currentHoveringSocket = closestSocketInteractor;
         } else
         {
-            currentHoveringSocket = currentSocket;
+            currentHoveringSocket = CurrentSocket;
         }
-            previewObject.transform.position = currentHoveringSocket.transform.position;
-        
+        previewObject.transform.SetPositionAndRotation(currentHoveringSocket.transform.position, SnappedRotation);
     }
 
     private void OnStartHovering(HoverEnterEventArgs args)
@@ -114,8 +125,8 @@ public class VRChessPiece : MonoBehaviour
         if (args.interactorObject is XRSocketInteractor)
         {
             isHovering = false;
-            currentHoveringSocket = currentSocket;
-            previewObject.transform.position = currentSocket.transform.position;
+            currentHoveringSocket = CurrentSocket;
+            previewObject.transform.position = CurrentSocket.transform.position;
         }
     }
 
