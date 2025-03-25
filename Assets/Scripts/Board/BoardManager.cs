@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class BoardManager : MonoBehaviour
 {
@@ -55,6 +57,7 @@ public class BoardManager : MonoBehaviour
         {
             // NPC will make a move
             ChessAI.Instance.NPCMove();
+            isWhiteTurn = true;
         }
     }
 
@@ -134,7 +137,11 @@ public class BoardManager : MonoBehaviour
                     Chessmans[x + 1, y] = Chessmans[x - 1, y];
                     Chessmans[x - 1, y] = null;
                     Chessmans[x + 1, y].SetPosition(x + 1, y);
-                    Chessmans[x + 1, y].transform.position = new Vector3(x + 1, 0, y);
+
+                    XRSocketInteractor socket = BoardSockets.Instance.VrChessSockets[x + 1, y].GetComponent<XRSocketInteractor>();
+                    XRGrabInteractable piece = Chessmans[x + 1, y].GetComponent<XRGrabInteractable>();
+                    socket.interactionManager.SelectEnter((IXRSelectInteractor)socket, (IXRSelectInteractable)piece);
+
                     Chessmans[x + 1, y].isMoved = true;
                 }
                 // Queen side (away from (0, 0))
@@ -144,7 +151,11 @@ public class BoardManager : MonoBehaviour
                     Chessmans[x - 1, y] = Chessmans[x + 2, y];
                     Chessmans[x + 2, y] = null;
                     Chessmans[x - 1, y].SetPosition(x - 1, y);
-                    Chessmans[x - 1, y].transform.position = new Vector3(x - 1, 0, y);
+
+                    XRSocketInteractor socket = BoardSockets.Instance.VrChessSockets[x - 1, y].GetComponent<XRSocketInteractor>();
+                    XRGrabInteractable piece = Chessmans[x - 1, y].GetComponent<XRGrabInteractable>();
+                    socket.interactionManager.SelectEnter((IXRSelectInteractor)socket, (IXRSelectInteractable)piece);
+
                     Chessmans[x - 1, y].isMoved = true;
                 }
                 // Note : King will move as a chessman by this function later
@@ -154,12 +165,8 @@ public class BoardManager : MonoBehaviour
             Chessmans[chessman.currentX, chessman.currentY] = null;
             Chessmans[x, y] = chessman;
             chessman.SetPosition(x, y);
-            chessman.transform.position = new Vector3(x, 0, y);
             chessman.isMoved = true;
             isWhiteTurn = !isWhiteTurn;
-
-            // to be deleted
-            // printBoard();
         }
 
         // ------- King Check Alert Manager -----------
