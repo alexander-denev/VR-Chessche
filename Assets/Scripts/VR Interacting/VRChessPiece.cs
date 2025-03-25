@@ -59,7 +59,7 @@ public class VRChessPiece : MonoBehaviour
             BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
             BoardHighlights.Instance.HighlightPossibleMoves(chessman);
 
-            previewObject.transform.position = chessman.transform.position;
+            previewObject.transform.position = currentSocket.transform.position;
             previewObject.SetActive(true);
         }
     }
