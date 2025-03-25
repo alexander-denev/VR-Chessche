@@ -17,10 +17,9 @@ public class VRChessPiece : MonoBehaviour
     {
         chessman = GetComponent<Chessman>();
 
-        previewObject = new GameObject("Hover Preview Object");
-        previewObject.transform.SetParent(transform);
-        previewObject.transform.localScale = Vector3.one;
-        previewObject.transform.localPosition = Vector3.zero;
+        previewObject = new GameObject("HoverPreviewObject_" + gameObject.name);
+        previewObject.transform.localScale = transform.localScale;
+        previewObject.transform.position = transform.position;
         previewObject.AddComponent<MeshFilter>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
         previewObject.AddComponent<MeshRenderer>().material = hoverPreviewMaterial;
         previewObject.SetActive(false);
@@ -30,8 +29,11 @@ public class VRChessPiece : MonoBehaviour
         grabInteractable.selectExited.AddListener(OnUngrab);
         grabInteractable.firstHoverEntered.AddListener(OnStartHovering);
         grabInteractable.lastHoverExited.AddListener(OnEndHovering);
-        grabInteractable.hoverEntered.AddListener(OnHoverEnter);
-        grabInteractable.hoverExited.AddListener(OnHoverExit);
+    }
+
+    private void Update()
+    {
+        HoverUpdate();
     }
 
     private void OnGrab(SelectEnterEventArgs args)
@@ -39,6 +41,7 @@ public class VRChessPiece : MonoBehaviour
         if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
             BoardHighlights.Instance.DisableAllHighlights();
+
             int socketX = (int)socketInteractor.transform.position.x;
             int socketY = (int)socketInteractor.transform.position.y;
             if (chessman.currentX != socketX || chessman.currentY != socketY)
@@ -49,23 +52,44 @@ public class VRChessPiece : MonoBehaviour
         {
             BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
             BoardHighlights.Instance.HighlightPossibleMoves(chessman);
+
+            previewObject.transform.position = chessman.transform.position;
+            previewObject.SetActive(true);
         }
     }
 
     private void OnUngrab(SelectExitEventArgs args)
     {
-        if (args.interactorObject is not XRSocketInteractor && !currentHoveringSocket)
+        if (args.interactorObject is not XRSocketInteractor)
         {
-            XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
-            currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)grabInteractable);
+            previewObject.SetActive(false);
+            if (currentHoveringSocket)
+            {
+                currentHoveringSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentHoveringSocket, (IXRSelectInteractable)grabInteractable);
+            }
+            else
+            {
+                XRSocketInteractor currentSocket = BoardSockets.Instance.VrChessSockets[chessman.currentX, chessman.currentY].GetComponent<XRSocketInteractor>();
+                currentSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentSocket, (IXRSelectInteractable)grabInteractable);
+            }
         }
     }
 
     // HOVER ============================================================================================================
 
+    private void HoverUpdate()
+    {
+        if (previewObject.activeSelf)
+        {
+            XRSocketInteractor closestSocket = GetClosestSocket();
+            currentHoveringSocket = closestSocket;
+            previewObject.transform.position = closestSocket.transform.position;
+        }
+    }
+
     private void OnStartHovering(HoverEnterEventArgs args)
     {
-        if (args.interactorObject is XRSocketInteractor && !(args.interactableObject as XRGrabInteractable).isSelected)
+        if (args.interactorObject is XRSocketInteractor eventSocket && !eventSocket.IsSelecting(grabInteractable))
         {
             previewObject.SetActive(true);
         }
@@ -76,28 +100,8 @@ public class VRChessPiece : MonoBehaviour
         if (args.interactorObject is XRSocketInteractor)
         {
             previewObject.SetActive(false);
+            currentHoveringSocket = null;
         }
-    }
-
-    private void OnHoverEnter(HoverEnterEventArgs args)
-    {
-        if (args.interactorObject is XRSocketInteractor eventSocket)
-        {
-            if (eventSocket = GetClosestSocket())
-            {
-            }
-        }
-    }
-
-    private void OnHoverExit(HoverExitEventArgs args)
-    {
-        //if (args.interactorObject is XRSocketInteractor eventSocket)
-        //{
-        //    if (!args.isCanceled)
-        //    {
-        //        currentHoveringSocket = null;
-        //    }
-        //}
     }
 
     private XRSocketInteractor GetClosestSocket()
