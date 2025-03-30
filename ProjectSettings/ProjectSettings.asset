@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: DarshanMaradiya - Unity 3D AI Chess - Unity 6
+  productName: 20101 VR Chess
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -164,7 +164,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.DefaultCompany.DarshanMaradiyaUnity3DAIChessUnity6
-    Standalone: com.DefaultCompany.DarshanMaradiya---Unity-3D-AI-Chess---Unity-6
+    Standalone: com.DefaultCompany.20101-VR-Chess
   buildNumber:
     Standalone: 0
     VisionOS: 0
