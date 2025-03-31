@@ -175,21 +175,19 @@ public class BoardHighlights : MonoBehaviour
 
     private void HighlightCheckers(int x, int y, Chessman king)
     {
-        Chessman[,] Chessmans = BoardManager.Instance.Chessmans;
-        Chessman piece = null;
-
-        if(!(x >= 0 && x <= 7 && y >= 0 && y <= 7))
+        if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7))
             return;
 
         int X = x;
         int Y = y;
 
+        Chessman piece;
         // Down
-        if(y - 1 >= 0)
+        if (y - 1 >= 0)
         {
             piece = BoardManager.Instance.Chessmans[x, y - 1];
             // If the cell is not empty and and the piece is from opponent and is King
-            if(piece != null && piece.isWhite != king.isWhite &&  piece.GetType() == typeof(King))
+            if (piece != null && piece.isWhite != king.isWhite && piece.GetType() == typeof(King))
             {
                 SetTileRed(x, y - 1);
                 return;
