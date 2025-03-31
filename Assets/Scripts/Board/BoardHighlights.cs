@@ -60,17 +60,27 @@ public class BoardHighlights : MonoBehaviour
         }
     }
 
-    public void DisableAllHighlights()
+    public void DisableAllButYellowHighlights()
     {
         for(int i=0; i<8; i++)
         {
             for(int j=0; j<8; j++)
             {
                 BlueTiles[i, j].SetActive(false);
-                YellowTiles[i, j].SetActive(false);
                 RedTiles[i, j].SetActive(false);
                 PurpleTiles[i, j].SetActive(false);
                 CheckTiles[i, j].SetActive(false);
+            }
+        }
+    }
+
+    public void DisableAllYellowHighlights()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                YellowTiles[i, j].SetActive(false);
             }
         }
     }
@@ -83,6 +93,11 @@ public class BoardHighlights : MonoBehaviour
     public void SetTileYellow(int x, int y)
     {
         YellowTiles[x, y].SetActive(true);
+    }
+
+    public void UnsetTileYellow(int x, int y)
+    {
+        YellowTiles[x, y].SetActive(false);
     }
 
     public void SetTileRed(int x, int y)

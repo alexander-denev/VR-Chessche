@@ -57,8 +57,6 @@ public class VRChessPiece : MonoBehaviour
     {
         if (args.interactorObject is XRSocketInteractor socketInteractor) 
         {
-            BoardHighlights.Instance.DisableAllHighlights();
-
             socketInteractor.transform.rotation = SnappedRotation;
 
             VRChessSocket vrSocket = socketInteractor.GetComponent<VRChessSocket>();
@@ -68,7 +66,6 @@ public class VRChessPiece : MonoBehaviour
             }
         } else
         {
-            BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
             BoardHighlights.Instance.HighlightPossibleMoves(chessman);
 
             previewObject.transform.position = CurrentSocket.transform.position;
@@ -81,6 +78,8 @@ public class VRChessPiece : MonoBehaviour
         if (args.interactorObject is not XRSocketInteractor)
         {
             previewObject.SetActive(false);
+            BoardHighlights.Instance.DisableAllButYellowHighlights();
+
             if (currentHoveringSocket)
             {
                 currentHoveringSocket.interactionManager.SelectEnter((IXRSelectInteractor)currentHoveringSocket, (IXRSelectInteractable)grabInteractable);
