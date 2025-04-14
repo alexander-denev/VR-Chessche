@@ -60,17 +60,27 @@ public class BoardHighlights : MonoBehaviour
         }
     }
 
-    public void DisableAllHighlights()
+    public void DisableAllButYellowHighlights()
     {
         for(int i=0; i<8; i++)
         {
             for(int j=0; j<8; j++)
             {
                 BlueTiles[i, j].SetActive(false);
-                YellowTiles[i, j].SetActive(false);
                 RedTiles[i, j].SetActive(false);
                 PurpleTiles[i, j].SetActive(false);
                 CheckTiles[i, j].SetActive(false);
+            }
+        }
+    }
+
+    public void DisableAllYellowHighlights()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                YellowTiles[i, j].SetActive(false);
             }
         }
     }
@@ -83,6 +93,11 @@ public class BoardHighlights : MonoBehaviour
     public void SetTileYellow(int x, int y)
     {
         YellowTiles[x, y].SetActive(true);
+    }
+
+    public void UnsetTileYellow(int x, int y)
+    {
+        YellowTiles[x, y].SetActive(false);
     }
 
     public void SetTileRed(int x, int y)
@@ -175,21 +190,19 @@ public class BoardHighlights : MonoBehaviour
 
     private void HighlightCheckers(int x, int y, Chessman king)
     {
-        Chessman[,] Chessmans = BoardManager.Instance.Chessmans;
-        Chessman piece = null;
-
-        if(!(x >= 0 && x <= 7 && y >= 0 && y <= 7))
+        if (!(x >= 0 && x <= 7 && y >= 0 && y <= 7))
             return;
 
         int X = x;
         int Y = y;
 
+        Chessman piece;
         // Down
-        if(y - 1 >= 0)
+        if (y - 1 >= 0)
         {
             piece = BoardManager.Instance.Chessmans[x, y - 1];
             // If the cell is not empty and and the piece is from opponent and is King
-            if(piece != null && piece.isWhite != king.isWhite &&  piece.GetType() == typeof(King))
+            if (piece != null && piece.isWhite != king.isWhite && piece.GetType() == typeof(King))
             {
                 SetTileRed(x, y - 1);
                 return;

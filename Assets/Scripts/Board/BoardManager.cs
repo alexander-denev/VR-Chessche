@@ -162,11 +162,16 @@ public class BoardManager : MonoBehaviour
             }
             // -------Castling Move Manager Over-------
 
+            BoardHighlights.Instance.DisableAllYellowHighlights();
+            BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
+
+
             Chessmans[chessman.currentX, chessman.currentY] = null;
             Chessmans[x, y] = chessman;
             chessman.SetPosition(x, y);
             chessman.isMoved = true;
             isWhiteTurn = !isWhiteTurn;
+
         }
 
         // ------- King Check Alert Manager -----------
@@ -272,7 +277,8 @@ public class BoardManager : MonoBehaviour
 
         // New Game
         isWhiteTurn = true;
-        BoardHighlights.Instance.DisableAllHighlights();
+        BoardHighlights.Instance.DisableAllButYellowHighlights();
+        BoardHighlights.Instance.DisableAllYellowHighlights();
         SpawnAllChessmans();
     }
 
