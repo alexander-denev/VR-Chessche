@@ -1,54 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
 
-    public GameObject pauseMenuUI;
+    [SerializeField] GameObject pauseMenuUI;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private InputActionReference pauseInputAction;
+
+    private void OnEnable()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (pauseInputAction != null)
         {
-        	if(GameIsPaused)
-        	{
-        		Resume();
-        	}
-        	else
-        	{
-        		Pause();
-        	}
+            Debug.Log("Pause Menu Input Action Enable");
+            pauseInputAction.action.Enable();
+            pauseInputAction.action.performed += TogglePause;
         }
     }
 
-    // Resume
-    public void Resume()
+    private void OnDisable()
     {
-    	pauseMenuUI.SetActive(false);
+        if (pauseInputAction != null)
+        {
+            pauseInputAction.action.performed -= TogglePause;
+            pauseInputAction.action.Disable();
+        }
+    }
+
+    void Resume()
+    {
+        pauseMenuUI.SetActive(false);
     	Time.timeScale = 1f;
     	GameIsPaused = false;
     }
 
-    // Pause
     void Pause()
     {
-    	pauseMenuUI.SetActive(true);
+        pauseMenuUI.SetActive(true);
     	Time.timeScale = 0f;
     	GameIsPaused = true;
     }
 
-    public void LoadOptions()
+    void TogglePause(InputAction.CallbackContext context)
     {
-    	Debug.Log("Loading Options..");
-    	
-    }
-
-    public void Quit()
-    {
-    	Debug.Log("Quit Game!!");
-    	Application.Quit();
+        Debug.Log("Toggle Pause Menu!");
+        if (GameIsPaused)
+        {
+            Resume();
+        }
+        else
+        {
+            Pause();
+        }
     }
 }

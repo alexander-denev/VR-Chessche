@@ -164,7 +164,7 @@ public class BoardManager : MonoBehaviour
 
             BoardHighlights.Instance.DisableAllYellowHighlights();
             BoardHighlights.Instance.SetTileYellow(chessman.currentX, chessman.currentY);
-
+            BoardHighlights.Instance.SetTileYellow(x, y);
 
             Chessmans[chessman.currentX, chessman.currentY] = null;
             Chessmans[x, y] = chessman;
@@ -315,7 +315,7 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Average Response Time of computer (in seconds): " + (ChessAI.Instance.averageResponseTime/1000.0));
 
             // Display Game Over Menu
-            GameOver.Instance.GameOverMenu();
+            GameOverMenu.Instance.OpenMenu();
 
             // EndGame();
         }
