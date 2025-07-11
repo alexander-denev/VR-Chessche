@@ -1,8 +1,6 @@
-# Unity-AI-Chess
+# VR-Chesche
 
-Minor Project (August - November, 2020)
-
-My first 3D-Game-Development work. The Chess is very well known in domain of Game AI from the beginnig. I, too have tried to demonstrate AI algorithms in this game. Following are the details about game:
+My first VR-Game-Development work. The Chess is very well known in domain of Game AI from the beginnig. I, too have tried to demonstrate AI algorithms in this game. Following are the details about game:
 
 <b>Game:</b> 3D AI Chess\
 <b>Game mode:</b> Human Player vs Computer\
@@ -26,4 +24,5 @@ My first 3D-Game-Development work. The Chess is very well known in domain of Gam
     -   The heart of the game is BoardManager script, which is handling the entire game from beginning to end while utilizing the classes and functions defined in other scripts
     -   The logic for Chess AI that is implementation of AI algorithm is written in ChessAI script
     -   The comments and meaningful variable/function names will be helpful to understand the code
--   You can refer report for screenshots and related details.
+ 
+You may write to me for further information :)
